@@ -1,30 +1,34 @@
+// Declaring variables
 let input = document.getElementById("input-tag");
 let button = document.getElementById("search-button");
 let characterContainer = document.getElementById("characterDescription");
 let listContainer = document.querySelector(".list");
 
+// Get the current timestamp in ms
 let date = new Date();
 console.log(date.getTime());
 
 const [timestamp, apiKey, hashValue] = [ts, publicKey, hash];
-
+// Function to display in input field
 function displayWords(value) {
   input.value = value;
   removeElements();
 }
-
+// Function to remove autocomplete suggestions
 function removeElements() {
   listContainer.innerHTML = "";
 }
-
+// Event listener for input
 input.addEventListener("keyup", async () => {
   removeElements();
   if (input.value.length < 4) {
     return false;
   }
 
+  // Construct the Marvel API URL for character search(Marvel Webiste, Get URL request then generate url option, it will give the url with public key)
   const url = `https://gateway.marvel.com:443/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}&nameStartsWith=${input.value}`;
 
+// Fetch data from Marvel API
   const response = await fetch(url);
   const jsonData = await response.json();
 
@@ -50,6 +54,7 @@ button.addEventListener(
     characterContainer.innerHTML = "";
     const url = `https://gateway.marvel.com:443/v1/public/characters?ts=${timestamp}&apikey=${apiKey}&hash=${hashValue}&name=${input.value}`;
 
+    // Iterate through the characters and fetch request from API with await which will pause the function until JSON is loaded completely
     const response = await fetch(url);
     const jsonData = await response.json();
     jsonData.data["results"].forEach((element) => {
@@ -64,6 +69,7 @@ button.addEventListener(
     });
   })
 )
+// Event listener for window load
 window.onload = () => {
   getRsult();
 };
